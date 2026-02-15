@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mám pro tebe překvapení...</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff0f5;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #d63384;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #btn-yes {
+            background-color: #ff4d6d;
+            color: white;
+            z-index: 100; /* Vždycky navrchu */
+        }
+
+        #btn-no {
+            background-color: #6c757d;
+            color: white;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Jsi připravená na svoje valentýnské překvapení? ❤️</h1>
+
+    <div class="container">
+        <button id="btn-yes" onclick="startSurprise()">ANO</button>
+        <button id="btn-no" onclick="moveButton()">NE</button>
+    </div>
+
+    <script>
+        let noClickCount = 0;
+        let yesScale = 1;
+
+        function moveButton() {
+            noClickCount++;
+            const btnNo = document.getElementById('btn-no');
+            const btnYes = document.getElementById('btn-yes');
+
+            if (noClickCount >= 5) {
+                btnNo.style.display = 'none';
+                btnYes.innerHTML = "Nemáš na výběr, klikni na mě! 😁";
+                btnYes.style.padding = "20px 40px";
+            } else {
+                btnNo.style.position = 'fixed';
+                
+                let randomX, randomY;
+                const rectYes = btnYes.getBoundingClientRect();
+                const safeMargin = 150; 
+
+                do {
+                    const maxX = window.innerWidth - btnNo.offsetWidth - 50;
+                    const maxY = window.innerHeight - btnNo.offsetHeight - 50;
+                    randomX = Math.floor(Math.random() * maxX);
+                    randomY = Math.floor(Math.random() * maxY);
+                } while (
+                    randomX > rectYes.left - safeMargin && 
+                    randomX < rectYes.right + safeMargin &&
+                    randomY > rectYes.top - safeMargin && 
+                    randomY < rectYes.bottom + safeMargin
+                );
+                
+                btnNo.style.left = randomX + 'px';
+                btnNo.style.top = randomY + 'px';
+
+                yesScale += 0.4;
+                btnYes.style.transform = `scale(${yesScale})`;
+            }
+        }
+ 
+        function startSurprise() {
+            const heslo = prompt("Zadej naše tajné heslo (datum), abys mohla vstoupit:");
+            
+            if (heslo === "192024") {
+                window.location.href = "hlavni.html"; 
+            } else if (heslo !== null) {
+                alert("Zkus to znovu, miláčku! ❤️");
+            }
+        }
+    </script>
+</body>
+</html>
